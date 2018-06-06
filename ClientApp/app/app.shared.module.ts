@@ -29,6 +29,7 @@ import { VegaComponent } from "./components/vega/vega.component";
          { path: 'home', component: HomeComponent },
          { path: 'counter', component: CounterComponent },
          { path: 'fetch-data', component: FetchDataComponent },
+         { path: 'vega', component: VegaComponent },
          { path: '**', redirectTo: 'home' }
       ])
    ]
