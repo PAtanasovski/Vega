@@ -4,13 +4,13 @@
    <div class="form-group">
       <label for="makes">Make</label>
       <select id="makes" class="form-control">
-
+         <option *ngFor="let make of makes" value="{{ make.id }}" (click)="loadModel(make.models)">{{ make.name }}</option>
       </select>
    </div>
    <div class="form-group">
       <label for="models">Model</label>
       <select id="models" class="form-control">
-
+         <option *ngFor="let model of models" value="{{ model.id }}">{{ model.name }}</option>
       </select>
    </div>
    <p>Is this vehicle registered?</p>
@@ -22,9 +22,10 @@
          <input type="radio" name="registered">No
       </label>
    </div>
-   <div class="checkbox">
+   <div class="checkbox-inline" *ngFor="let feature of features">
       <label>
-         <input type="checkbox">test</label>
+         <input type="checkbox" value="{{ feature.id }}">{{ feature.name }}
+      </label>
    </div>
    <div class="form-group">
       <label for="name">Contact Name</label>
