@@ -50,6 +50,12 @@ namespace Vega.Controllers
 
          var vehicle = context.Vehicles
             .Include(v => v.Features).SingleOrDefault(v => v.Id == id);
+
+         if (vehicle == null)
+         {
+            return NotFound();
+         }
+
          mapper.Map<VehicleResource, Vehicle>(vehicleResource, vehicle);
          vehicle.LastUpdate = DateTime.Now;
 
@@ -57,6 +63,22 @@ namespace Vega.Controllers
 
          var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
          return Ok(result);
+      }
+
+      [HttpDelete("{id}")]
+      public IActionResult DeleteVehicle(int id)
+      {
+         var vehicle = context.Vehicles.Find(id);
+
+         if (vehicle == null)
+         {
+            return NotFound();
+         }
+
+         context.Remove(vehicle);
+         context.SaveChanges();
+
+         return Ok(id);
       }
 
       // [HttpPost]
