@@ -81,6 +81,22 @@ namespace Vega.Controllers
          return Ok(id);
       }
 
+      [HttpGet("{id}")]
+      public IActionResult GetVehicle(int id)
+      {
+         var vehicle = context.Vehicles
+            .Include(v => v.Features).SingleOrDefault(v => v.Id == id);
+
+         if (vehicle == null)
+         {
+            return NotFound();
+         }
+
+         var vehicleResource = mapper.Map<Vehicle, VehicleResource>(vehicle);
+
+         return Ok(vehicleResource);
+      }
+
       // [HttpPost]
       // public async Task<IActionResult> CreateVehicle([FromBody] VehicleResource vehicleResource)
       // {
