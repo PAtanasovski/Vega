@@ -24,6 +24,11 @@ namespace Vega.Controllers
       [HttpPost]
       public IActionResult CreateVehicle([FromBody] VehicleResource vehicleResource)
       {
+         if (!ModelState.IsValid)
+         {
+            return BadRequest(ModelState);
+         }
+
          var vehicle = mapper.Map<VehicleResource, Vehicle>(vehicleResource);
          vehicle.LastUpdate = DateTime.Now;
          context.Vehicles.Add(vehicle);
@@ -36,6 +41,11 @@ namespace Vega.Controllers
       // [HttpPost]
       // public async Task<IActionResult> CreateVehicle([FromBody] VehicleResource vehicleResource)
       // {
+      //    if (!ModelState.IsValid)
+      //    {
+      //       return BadRequest(ModelState);
+      //    }
+      //
       //    var vehicle = mapper.Map<VehicleResource, Vehicle>(vehicleResource);
       //    vehicle.LastUpdate = DateTime.Now;
       //    context.Vehicles.Add(vehicle);
