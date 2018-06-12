@@ -15,18 +15,18 @@ namespace Vega.Controllers
    {
       private readonly IMapper mapper;
 
-      private readonly VegaDbContext context;
-
       private readonly IVehicleRepository repository;
+
+      private readonly IUnitOfWork unitOfWork;
 
       public VehiclesController(
          IMapper mapper,
-         VegaDbContext context,
-         IVehicleRepository repository
+         IVehicleRepository repository,
+         IUnitOfWork unitOfWork
       )
       {
-         this.context = context;
          this.repository = repository;
+         this.unitOfWork = unitOfWork;
          this.mapper = mapper;
       }
 
@@ -40,8 +40,8 @@ namespace Vega.Controllers
 
          var vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
          vehicle.LastUpdate = DateTime.Now;
-         context.Vehicles.Add(vehicle);
-         context.SaveChanges();
+         repository.Add(vehicle);
+         unitOfWork.Complete();
 
          vehicle = repository.GetVehicle(vehicle.Id);
 
@@ -67,7 +67,7 @@ namespace Vega.Controllers
          mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
          vehicle.LastUpdate = DateTime.Now;
 
-         context.SaveChanges();
+         unitOfWork.Complete();
 
          var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
          return Ok(result);
@@ -76,15 +76,15 @@ namespace Vega.Controllers
       [HttpDelete("{id}")]
       public IActionResult DeleteVehicle(int id)
       {
-         var vehicle = context.Vehicles.Find(id);
+         var vehicle = repository.GetVehicle(id, includeRelated: false);
 
          if (vehicle == null)
          {
             return NotFound();
          }
 
-         context.Remove(vehicle);
-         context.SaveChanges();
+         repository.Remove(vehicle);
+         unitOfWork.Complete();
 
          return Ok(id);
       }
