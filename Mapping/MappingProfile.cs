@@ -12,8 +12,9 @@ namespace Vega.Mapping
       {
          // Domain to API Resource
          CreateMap<Make, MakeResource>();
-         CreateMap<Model, ModelResource>();
-         CreateMap<Feature, FeatureResource>();
+         CreateMap<Make, KeyValuePairResource>();
+         CreateMap<Model, KeyValuePairResource>();
+         CreateMap<Feature, KeyValuePairResource>();
          CreateMap<Vehicle, SaveVehicleResource>()
             .ForMember(
                vr => vr.Contact,
@@ -43,7 +44,7 @@ namespace Vega.Mapping
             .ForMember(
                vr => vr.Features,
                opt => opt.MapFrom(v => v.Features.Select(
-                  vf => new FeatureResource
+                  vf => new KeyValuePairResource
                   {
                      Id = vf.Feature.Id,
                      Name = vf.Feature.Name
