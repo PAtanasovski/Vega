@@ -1,3 +1,5 @@
+using Vega.Core;
+
 namespace Vega.Persistence
 {
    public class UnitOfWork : IUnitOfWork
