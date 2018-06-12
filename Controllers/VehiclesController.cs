@@ -17,9 +17,16 @@ namespace Vega.Controllers
 
       private readonly VegaDbContext context;
 
-      public VehiclesController(IMapper mapper, VegaDbContext context)
+      private readonly IVehicleRepository repository;
+
+      public VehiclesController(
+         IMapper mapper,
+         VegaDbContext context,
+         IVehicleRepository repository
+      )
       {
          this.context = context;
+         this.repository = repository;
          this.mapper = mapper;
       }
 
@@ -36,12 +43,7 @@ namespace Vega.Controllers
          context.Vehicles.Add(vehicle);
          context.SaveChanges();
 
-         vehicle = context.Vehicles
-            .Include(v => v.Features)
-               .ThenInclude(vf => vf.Feature)
-            .Include(v => v.Model)
-               .ThenInclude(m => m.Make)
-            .SingleOrDefault(v => v.Id == vehicle.Id);
+         vehicle = repository.GetVehicle(vehicle.Id);
 
          var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
          return Ok(result);
@@ -55,12 +57,7 @@ namespace Vega.Controllers
             return BadRequest(ModelState);
          }
 
-         var vehicle = context.Vehicles
-            .Include(v => v.Features)
-               .ThenInclude(vf => vf.Feature)
-            .Include(v => v.Model)
-               .ThenInclude(m => m.Make)
-            .SingleOrDefault(v => v.Id == id);
+         var vehicle = repository.GetVehicle(id);
 
          if (vehicle == null)
          {
@@ -95,12 +92,7 @@ namespace Vega.Controllers
       [HttpGet("{id}")]
       public IActionResult GetVehicle(int id)
       {
-         var vehicle = context.Vehicles
-            .Include(v => v.Features)
-               .ThenInclude(vf => vf.Feature)
-            .Include(v => v.Model)
-               .ThenInclude(m => m.Make)
-            .SingleOrDefault(v => v.Id == id);
+         var vehicle = repository.GetVehicle(id);
 
          if (vehicle == null)
          {
