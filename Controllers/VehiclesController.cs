@@ -24,24 +24,24 @@ namespace Vega.Controllers
       }
 
       [HttpPost]
-      public IActionResult CreateVehicle([FromBody] VehicleResource vehicleResource)
+      public IActionResult CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
       {
          if (!ModelState.IsValid)
          {
             return BadRequest(ModelState);
          }
 
-         var vehicle = mapper.Map<VehicleResource, Vehicle>(vehicleResource);
+         var vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
          vehicle.LastUpdate = DateTime.Now;
          context.Vehicles.Add(vehicle);
          context.SaveChanges();
 
-         var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
+         var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
          return Ok(result);
       }
 
       [HttpPut("{id}")]
-      public IActionResult UpdateVehicle(int id, [FromBody] VehicleResource vehicleResource)
+      public IActionResult UpdateVehicle(int id, [FromBody] SaveVehicleResource vehicleResource)
       {
          if (!ModelState.IsValid)
          {
@@ -56,12 +56,12 @@ namespace Vega.Controllers
             return NotFound();
          }
 
-         mapper.Map<VehicleResource, Vehicle>(vehicleResource, vehicle);
+         mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
          vehicle.LastUpdate = DateTime.Now;
 
          context.SaveChanges();
 
-         var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
+         var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
          return Ok(result);
       }
 
@@ -85,7 +85,11 @@ namespace Vega.Controllers
       public IActionResult GetVehicle(int id)
       {
          var vehicle = context.Vehicles
-            .Include(v => v.Features).SingleOrDefault(v => v.Id == id);
+            .Include(v => v.Features)
+               .ThenInclude(vf => vf.Feature)
+            .Include(v => v.Model)
+               .ThenInclude(m => m.Make)
+            .SingleOrDefault(v => v.Id == id);
 
          if (vehicle == null)
          {
