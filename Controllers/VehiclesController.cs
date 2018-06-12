@@ -69,6 +69,8 @@ namespace Vega.Controllers
 
          unitOfWork.Complete();
 
+         vehicle = repository.GetVehicle(vehicle.Id);
+
          var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
          return Ok(result);
       }
