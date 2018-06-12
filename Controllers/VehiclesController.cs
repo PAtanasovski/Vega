@@ -36,7 +36,14 @@ namespace Vega.Controllers
          context.Vehicles.Add(vehicle);
          context.SaveChanges();
 
-         var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+         vehicle = context.Vehicles
+            .Include(v => v.Features)
+               .ThenInclude(vf => vf.Feature)
+            .Include(v => v.Model)
+               .ThenInclude(m => m.Make)
+            .SingleOrDefault(v => v.Id == vehicle.Id);
+
+         var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
          return Ok(result);
       }
 
@@ -49,7 +56,11 @@ namespace Vega.Controllers
          }
 
          var vehicle = context.Vehicles
-            .Include(v => v.Features).SingleOrDefault(v => v.Id == id);
+            .Include(v => v.Features)
+               .ThenInclude(vf => vf.Feature)
+            .Include(v => v.Model)
+               .ThenInclude(m => m.Make)
+            .SingleOrDefault(v => v.Id == id);
 
          if (vehicle == null)
          {
@@ -61,7 +72,7 @@ namespace Vega.Controllers
 
          context.SaveChanges();
 
-         var result = mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+         var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
          return Ok(result);
       }
 
