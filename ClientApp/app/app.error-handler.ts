@@ -1,3 +1,4 @@
+import * as Raven from 'raven-js';
 import { ErrorHandler, Inject, NgZone } from '@angular/core';
 import { ToastyService } from 'ng2-toasty';
 
@@ -8,6 +9,8 @@ export class AppErrorHandler implements ErrorHandler {
       @Inject(ToastyService) private toastyService: ToastyService) { }
 
    handleError(error: any): void {
+      Raven.captureException(error.originalError || error);
+
       this.ngZone.run(() => {
          if (typeof (window) !== 'undefined') {
             this.toastyService.error({
