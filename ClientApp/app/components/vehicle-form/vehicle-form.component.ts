@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastyService } from 'ng2-toasty';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
 
 import { VehicleService } from './../../services/vehicle.service';
 
@@ -23,28 +25,33 @@ export class VehicleFormComponent implements OnInit {
       private router: Router,
       private vehicleService: VehicleService,
       private toastyService: ToastyService) {
-      route.paramMap.subscribe(params => {
-         if (params.get('id')) {
-            this.vehicle.id = params.get('id');
-         }
+      route.params.subscribe(p => {
+         this.vehicle.id = +p['id'];
       });
    }
 
    ngOnInit() {
-      if (this.vehicle.id > 0) {
-         this.vehicleService.getVehicle(this.vehicle.id)
-            .subscribe(v => {
-               this.vehicle = v;
-            }, err => {
-               this.router.navigate(['/home']);
-            });
+      var sources = [
+         this.vehicleService.getMakes(),
+         this.vehicleService.getFeatures(),
+      ];
+
+      if (this.vehicle.id) {
+         sources.push(this.vehicleService.getVehicle(this.vehicle.id));
       }
 
-      this.vehicleService.getMakes()
-         .subscribe(makes => this.makes = makes);
-
-      this.vehicleService.getFeatures()
-         .subscribe(features => this.features = features);
+      Observable.forkJoin(sources)
+         .subscribe(data => {
+            this.makes = data[0];
+            this.features = data[1];
+            if (this.vehicle.id) {
+               this.vehicle = data[2];
+            }
+         }, err => {
+            if (err.status == 404) {
+               this.router.navigate(['/home']);
+            }
+         });
    }
 
    onMakeChange() {
