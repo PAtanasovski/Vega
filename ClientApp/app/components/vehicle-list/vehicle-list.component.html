@@ -15,14 +15,15 @@
 <table class="table">
    <thead>
       <tr>
-         <th>Id</th>
-         <th (click)="sortBy('make')">
-            Make
-            <i class="fa" *ngIf="query.sortBy === 'make'" [class.fa-sort-asc]="query.isSortAscending" [class.fa-sort-desc]="!query.isSortAscending"></i>
+         <th *ngFor="let column of columns">
+            <div *ngIf="column.isSortable" (click)="sortBy(column.key)">
+               {{ column.title }}
+               <i class="fa" *ngIf="query.sortBy === column.key" [class.fa-sort-asc]="query.isSortAscending" [class.fa-sort-desc]="!query.isSortAscending"></i>
+            </div>
+            <div *ngIf="!column.isSortable">
+               {{ column.title }}
+            </div>
          </th>
-         <th (click)="sortBy('model')">Model</th>
-         <th (click)="sortBy('contactName')">Contact Name</th>
-         <th></th>
       </tr>
    </thead>
    <tbody>
