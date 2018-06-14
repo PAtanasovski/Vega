@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Vega.Core;
@@ -36,6 +37,16 @@ namespace Vega.Persistence
       public void Remove(Vehicle vehicle)
       {
          context.Remove(vehicle);
+      }
+
+      public IEnumerable<Vehicle> GetVehicles()
+      {
+         return context.Vehicles
+            .Include(v => v.Model)
+               .ThenInclude(m => m.Make)
+            .Include(v => v.Features)
+               .ThenInclude(vf => vf.Feature)
+            .ToList();
       }
    }
 }
