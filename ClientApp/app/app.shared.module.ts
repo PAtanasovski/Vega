@@ -15,6 +15,7 @@ import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.com
 import { VehicleService } from './services/vehicle.service';
 import { AppErrorHandler } from './app.error-handler';
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+import { PaginationComponent } from './components/shared/pagination.component';
 
 Raven.config('https://4faafe3bc3354f96a36035993ca0120c@sentry.io/1225799').install();
 
@@ -26,7 +27,8 @@ Raven.config('https://4faafe3bc3354f96a36035993ca0120c@sentry.io/1225799').insta
       FetchDataComponent,
       HomeComponent,
       VehicleFormComponent,
-      VehicleListComponent
+      VehicleListComponent,
+      PaginationComponent
    ],
    imports: [
       CommonModule,
