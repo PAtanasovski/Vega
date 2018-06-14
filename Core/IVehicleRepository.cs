@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Vega.Core.Models;
 
 namespace Vega.Core
@@ -9,5 +10,7 @@ namespace Vega.Core
       void Add(Vehicle vehicle);
 
       void Remove(Vehicle vehicle);
+
+      QueryResult<Vehicle> GetVehicles(VehicleQuery filter);
    }
 }

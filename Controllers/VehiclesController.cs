@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Vega.Controllers.Resources;
 using Vega.Core.Models;
 using Vega.Core;
+using System.Collections.Generic;
 
 namespace Vega.Controllers
 {
@@ -33,8 +34,6 @@ namespace Vega.Controllers
       [HttpPost]
       public IActionResult CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
       {
-         throw new Exception();
-
          if (!ModelState.IsValid)
          {
             return BadRequest(ModelState);
@@ -106,6 +105,15 @@ namespace Vega.Controllers
          var vehicleResource = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
          return Ok(vehicleResource);
+      }
+
+      [HttpGet]
+      public QueryResultResource<VehicleResource> GetVehicles(VehicleQueryResource filterResource)
+      {
+         var filter = mapper.Map<VehicleQueryResource, VehicleQuery>(filterResource);
+         var queryResult = repository.GetVehicles(filter);
+
+         return mapper.Map<QueryResult<Vehicle>, QueryResultResource<VehicleResource>>(queryResult);
       }
 
       // [HttpPost]

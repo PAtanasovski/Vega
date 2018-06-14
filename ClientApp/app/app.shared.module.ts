@@ -14,6 +14,8 @@ import { CounterComponent } from './components/counter/counter.component';
 import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.component';
 import { VehicleService } from './services/vehicle.service';
 import { AppErrorHandler } from './app.error-handler';
+import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
+import { PaginationComponent } from './components/shared/pagination.component';
 
 Raven.config('https://4faafe3bc3354f96a36035993ca0120c@sentry.io/1225799').install();
 
@@ -24,7 +26,9 @@ Raven.config('https://4faafe3bc3354f96a36035993ca0120c@sentry.io/1225799').insta
       CounterComponent,
       FetchDataComponent,
       HomeComponent,
-      VehicleFormComponent
+      VehicleFormComponent,
+      VehicleListComponent,
+      PaginationComponent
    ],
    imports: [
       CommonModule,
@@ -32,9 +36,10 @@ Raven.config('https://4faafe3bc3354f96a36035993ca0120c@sentry.io/1225799').insta
       FormsModule,
       ToastyModule.forRoot(),
       RouterModule.forRoot([
-         { path: '', redirectTo: 'home', pathMatch: 'full' },
+         { path: '', redirectTo: 'vehicles', pathMatch: 'full' },
          { path: 'vehicles/new', component: VehicleFormComponent },
          { path: 'vehicles/:id', component: VehicleFormComponent },
+         { path: 'vehicles', component: VehicleListComponent },
          { path: 'home', component: HomeComponent },
          { path: 'counter', component: CounterComponent },
          { path: 'fetch-data', component: FetchDataComponent },
