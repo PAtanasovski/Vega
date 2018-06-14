@@ -52,7 +52,7 @@ namespace Vega.Mapping
                )));
 
          // API Resource to Domain
-         CreateMap<FilterResource, Filter>();
+         CreateMap<VehicleQueryResource, VehicleQuery>();
          CreateMap<SaveVehicleResource, Vehicle>()
             .ForMember(
                vehicle => vehicle.Id,
