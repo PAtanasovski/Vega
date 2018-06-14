@@ -11,6 +11,6 @@ namespace Vega.Core
 
       void Remove(Vehicle vehicle);
 
-      IEnumerable<Vehicle> GetVehicles(VehicleQuery filter);
+      QueryResult<Vehicle> GetVehicles(VehicleQuery filter);
    }
 }

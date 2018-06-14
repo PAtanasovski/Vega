@@ -42,8 +42,10 @@ namespace Vega.Persistence
          context.Remove(vehicle);
       }
 
-      public IEnumerable<Vehicle> GetVehicles(VehicleQuery queryObj)
+      public QueryResult<Vehicle> GetVehicles(VehicleQuery queryObj)
       {
+         var result = new QueryResult<Vehicle>();
+
          var query = context.Vehicles
             .Include(v => v.Model)
                .ThenInclude(m => m.Make)
@@ -105,9 +107,13 @@ namespace Vega.Persistence
          // }
          #endregion
 
+         result.TotalItems = query.Count();
+
          query = query.ApplyPaging(queryObj);
 
-         return query.ToList();
+         result.Items = query.ToList();
+
+         return result;
       }
    }
 }

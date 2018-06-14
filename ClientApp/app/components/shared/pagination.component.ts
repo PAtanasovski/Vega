@@ -16,7 +16,7 @@ export class PaginationComponent implements OnChanges {
       var pagesCount = Math.ceil(this.totalItems / this.pageSize);
       this.pages = [];
 
-      for (var i = 1; i < pagesCount; i++) {
+      for (var i = 1; i <= pagesCount; i++) {
          this.pages.push(i);
       }
 

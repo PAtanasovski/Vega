@@ -107,12 +107,13 @@ namespace Vega.Controllers
          return Ok(vehicleResource);
       }
 
-      public IEnumerable<VehicleResource> GetVehicles(VehicleQueryResource filterResource)
+      [HttpGet]
+      public QueryResultResource<VehicleResource> GetVehicles(VehicleQueryResource filterResource)
       {
          var filter = mapper.Map<VehicleQueryResource, VehicleQuery>(filterResource);
-         var vehicles = repository.GetVehicles(filter);
+         var queryResult = repository.GetVehicles(filter);
 
-         return mapper.Map<IEnumerable<Vehicle>, IEnumerable<VehicleResource>>(vehicles);
+         return mapper.Map<QueryResult<Vehicle>, QueryResultResource<VehicleResource>>(queryResult);
       }
 
       // [HttpPost]
