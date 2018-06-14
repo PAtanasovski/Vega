@@ -32,7 +32,7 @@ namespace Vega
 
          services.AddAutoMapper();
 
-         services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+         services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), opt => opt.UseRowNumberForPaging()));
 
          services.AddMvc();
       }

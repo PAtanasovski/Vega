@@ -105,6 +105,8 @@ namespace Vega.Persistence
          // }
          #endregion
 
+         query = query.ApplyPaging(queryObj);
+
          return query.ToList();
       }
    }
