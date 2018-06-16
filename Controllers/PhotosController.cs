@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AutoMapper;
@@ -17,7 +18,9 @@ namespace Vega.Controllers
    {
       private readonly IHostingEnvironment host;
 
-      private readonly IVehicleRepository repository;
+      private readonly IVehicleRepository vehicleRepository;
+
+      private readonly IPhotoRepository photoRepository;
 
       private readonly IUnitOfWork unitOfWork;
 
@@ -27,22 +30,32 @@ namespace Vega.Controllers
 
       public PhotosController(
          IHostingEnvironment host,
-         IVehicleRepository repository,
+         IVehicleRepository vehicleRepository,
+         IPhotoRepository photoRepository,
          IUnitOfWork unitOfWork,
          IMapper mapper,
          IOptionsSnapshot<PhotoSettings> options)
       {
          this.photoSettings = options.Value;
-         this.repository = repository;
+         this.vehicleRepository = vehicleRepository;
+         this.photoRepository = photoRepository;
          this.unitOfWork = unitOfWork;
          this.mapper = mapper;
          this.host = host;
       }
 
+      [HttpGet]
+      public IEnumerable<PhotoResource> GetPhotos(int vehicleId)
+      {
+         var photos = photoRepository.GetPhotos(vehicleId);
+
+         return mapper.Map<IEnumerable<Photo>, IEnumerable<PhotoResource>>(photos);
+      }
+
       [HttpPost]
       public IActionResult Upload(int vehicleId, IFormFile file)
       {
-         var vehicle = repository.GetVehicle(vehicleId, includeRelated: false);
+         var vehicle = vehicleRepository.GetVehicle(vehicleId, includeRelated: false);
 
          if (vehicle == null)
          {
