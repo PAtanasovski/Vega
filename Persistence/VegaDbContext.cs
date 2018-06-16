@@ -13,6 +13,8 @@ namespace Vega.Persistence
 
       public DbSet<Feature> Features { get; set; }
 
+      public DbSet<Photo> Photos { get; set; }
+
       public VegaDbContext(DbContextOptions<VegaDbContext> options) : base(options)
       {
       }
