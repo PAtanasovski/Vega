@@ -9,6 +9,7 @@ import { ToastyModule } from 'ng2-toasty';
 import { VehicleService } from './services/vehicle.service';
 import { PhotoService } from './services/photo.service';
 import { BrowserXhrWithProgress, ProgressService } from './services/progress.service';
+import { AuthService } from './services/auth.service';
 
 import { AppErrorHandler } from './app.error-handler';
 
@@ -21,6 +22,7 @@ import { VehicleFormComponent } from './components/vehicle-form/vehicle-form.com
 import { VehicleListComponent } from './components/vehicle-list/vehicle-list.component';
 import { PaginationComponent } from './components/shared/pagination.component';
 import { ViewVehicleComponent } from './components/view-vehicle/view-vehicle.component';
+import { ProfileComponent } from './components/profile/profile/profile.component';
 
 Raven.config('https://4faafe3bc3354f96a36035993ca0120c@sentry.io/1225799').install();
 
@@ -34,7 +36,8 @@ Raven.config('https://4faafe3bc3354f96a36035993ca0120c@sentry.io/1225799').insta
       VehicleFormComponent,
       VehicleListComponent,
       ViewVehicleComponent,
-      PaginationComponent
+      PaginationComponent,
+      ProfileComponent
    ],
    imports: [
       CommonModule,
@@ -50,12 +53,14 @@ Raven.config('https://4faafe3bc3354f96a36035993ca0120c@sentry.io/1225799').insta
          { path: 'home', component: HomeComponent },
          { path: 'counter', component: CounterComponent },
          { path: 'fetch-data', component: FetchDataComponent },
+         { path: 'profile', component: ProfileComponent },
          { path: '**', redirectTo: 'home' }
       ])
    ],
    providers: [
       { provide: ErrorHandler, useClass: AppErrorHandler },
       { provide: BrowserXhr, useClass: BrowserXhrWithProgress },
+      AuthService,
       VehicleService,
       PhotoService,
       ProgressService

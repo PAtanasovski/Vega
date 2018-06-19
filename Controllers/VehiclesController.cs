@@ -8,6 +8,7 @@ using Vega.Controllers.Resources;
 using Vega.Core.Models;
 using Vega.Core;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Vega.Controllers
 {
@@ -32,6 +33,7 @@ namespace Vega.Controllers
       }
 
       [HttpPost]
+      [Authorize]
       public IActionResult CreateVehicle([FromBody] SaveVehicleResource vehicleResource)
       {
          if (!ModelState.IsValid)
@@ -51,6 +53,7 @@ namespace Vega.Controllers
       }
 
       [HttpPut("{id}")]
+      [Authorize]
       public IActionResult UpdateVehicle(int id, [FromBody] SaveVehicleResource vehicleResource)
       {
          if (!ModelState.IsValid)
@@ -77,6 +80,7 @@ namespace Vega.Controllers
       }
 
       [HttpDelete("{id}")]
+      [Authorize]
       public IActionResult DeleteVehicle(int id)
       {
          var vehicle = repository.GetVehicle(id, includeRelated: false);

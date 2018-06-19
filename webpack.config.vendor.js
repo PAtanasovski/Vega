@@ -15,6 +15,7 @@ const treeShakableModules = [
    'zone.js',
 ];
 const nonTreeShakableModules = [
+   'auth0-js',
    'bootstrap',
    'bootstrap/dist/css/bootstrap.css',
    'es6-promise',
